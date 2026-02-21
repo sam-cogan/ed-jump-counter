@@ -85,6 +85,9 @@ export class JournalWatcher extends EventEmitter {
     this.watcher.on('change', (filePath: string) => {
       if (filePath === this.currentFile) {
         this.readCurrentFile();
+      } else if (filePath === this.routeFilePath) {
+        this.readNavRouteFile();
+        this.emit('routeUpdate', { ...this.state });
       }
     });
 
@@ -146,9 +149,6 @@ export class JournalWatcher extends EventEmitter {
       this.state.totalJumps = routeData.length - 1;
       this.state.completedJumps = 0;
       this.state.destinationSystem = routeData[routeData.length - 1].StarSystem;
-      
-      // Read NavRoute.json for more details
-      this.readNavRouteFile();
 
       this.emit('routeUpdate', { ...this.state });
     }
