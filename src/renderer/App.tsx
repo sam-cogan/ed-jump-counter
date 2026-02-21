@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import JumpCounter from './components/JumpCounter';
 import Settings from './components/Settings';
+import TitleBar from './components/TitleBar';
 import type { JumpState } from './types';
 
 function App() {
@@ -47,14 +48,12 @@ function App() {
 
   return (
     <div className="app">
-      <div className="window-controls">
-        <button className="control-btn settings-btn" onClick={() => setShowSettings(!showSettings)} title="Settings">
-          ⚙
-        </button>
-        <button className="control-btn close-btn" onClick={() => window.electronAPI.closeWindow()} title="Close">
-          ×
-        </button>
-      </div>
+      <TitleBar
+        alwaysOnTop={alwaysOnTop}
+        onToggleAlwaysOnTop={handleToggleAlwaysOnTop}
+        showSettings={showSettings}
+        onToggleSettings={() => setShowSettings(!showSettings)}
+      />
 
       {showSettings ? (
         <Settings 
