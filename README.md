@@ -1,33 +1,28 @@
 # ED Jump Counter
 
-A desktop application that displays remaining jumps in an Elite Dangerous route on a second screen. Designed with ED's dark sci-fi aesthetic.
+A desktop application that displays remaining jumps in an Elite Dangerous route on a second screen. Designed to be visually appealing with ED's dark sci-fi aesthetic.
 
-![Elite Dangerous Jump Counter](./assets/screenshot.png)
+![ED Jump Counter](https://img.shields.io/badge/Elite%20Dangerous-Jump%20Counter-orange)
+![Electron](https://img.shields.io/badge/Electron-28-blue)
+![React](https://img.shields.io/badge/React-18-blue)
+![TypeScript](https://img.shields.io/badge/TypeScript-5.3-blue)
 
 ## Features
 
-- **Real-time jump tracking** - Watches Elite Dangerous journal files for route and jump events
-- **Sleek ED-themed UI** - Dark theme with orange accents matching the game's HUD
-- **Always-on-top option** - Perfect for second monitor/overlay use
-- **Frameless window** - Minimalist design that stays out of the way
-- **Carrier jump support** - Tracks both FSD and carrier jumps
-
-## How It Works
-
-Elite Dangerous writes game events to JSON log files in real-time. This app watches those files and:
-
-1. Detects when you plot a route (`NavRoute` event)
-2. Counts completed jumps (`FSDJump` / `CarrierJump` events)
-3. Updates the display with remaining jumps
-4. Resets when you clear the route or plot a new one
+- 🚀 Real-time jump tracking from Elite Dangerous journal files
+- 🎨 Dark ED-themed UI with orange/blue accents
+- 🖥️ Always-on-top mode for second screen display
+- 📊 Progress bar showing route completion
+- ⚙️ Settings for window behavior
+- 📦 Windows installer included
 
 ## Installation
 
-### From Release
+### Windows (MSI Installer)
 
-1. Download the latest release from the [Releases page](https://github.com/sam-cogan/ed-jump-counter/releases)
-2. Run the installer (Windows) or extract the archive
-3. Launch "ED Jump Counter"
+1. Download the latest `EDJumpCounter-Setup-x.x.x.exe` from [Releases](../../releases)
+2. Run the installer
+3. Launch ED Jump Counter from Start Menu or Desktop
 
 ### From Source
 
@@ -39,82 +34,120 @@ cd ed-jump-counter
 # Install dependencies
 npm install
 
-# Run in development mode
+# Build and package
+npm run build
+```
+
+The packaged installer will be in `release/` directory.
+
+### Development
+
+```bash
+# Start development server with hot reload
 npm run dev
 
-# Build for production
-npm run build
+# In a separate terminal, run Electron
+npm run electron:dev
 ```
 
 ## Usage
 
 1. Launch ED Jump Counter
-2. Start Elite Dangerous
-3. Plot a route to your destination
-4. The counter will automatically update as you make jumps
+2. The window will appear with a transparent background
+3. Plot a route in Elite Dangerous
+4. The app will automatically detect and display remaining jumps
+5. Each jump completion updates the counter in real-time
 
-### Controls
+### Window Controls
 
-- **📌 Pin button** - Toggle always-on-top mode
-- **— Minimize** - Minimize to taskbar
-- **× Close** - Exit the application
-- **Drag title bar** - Move the window
+- **Settings (⚙️)**: Toggle settings panel
+- **Close (×)**: Close the application
+- **Drag**: Move the window around
 
-## Configuration
+### Settings
 
-The app automatically detects Elite Dangerous journal files in the default location:
+- **Always on Top**: Keep the window on top of other applications (enabled by default)
+
+## How It Works
+
+ED Jump Counter monitors Elite Dangerous journal files:
+
+1. **Journal Location**: `%USERPROFILE%\Saved Games\Frontier Developments\Elite Dangerous\`
+2. **Events Tracked**:
+   - `NavRoute`: Detects when a route is plotted
+   - `FSDJump`: Counts completed jumps
+   - `NavRouteClear`: Resets when route is cleared
+
+## Supported Versions
+
+- Elite Dangerous: Horizons (3.8+)
+- Elite Dangerous: Odyssey (4.0+)
+- Windows 10/11
+
+## Building
+
+### Prerequisites
+
+- Node.js 18+
+- npm 9+
+- Windows build tools (for Windows builds)
+
+```bash
+# Install dependencies
+npm install
+
+# Build for current platform
+npm run build
+
+# Build for specific platform
+npm run build -- --win    # Windows
+npm run build -- --mac    # macOS
+npm run build -- --linux  # Linux
+```
+
+## Architecture
 
 ```
-%USERPROFILE%\Saved Games\Frontier Developments\Elite Dangerous\
+ed-jump-counter/
+├── src/
+│   ├── main/           # Electron main process
+│   │   ├── index.ts    # Window creation & IPC
+│   │   └── journal-watcher.ts  # File watching & event parsing
+│   ├── renderer/       # React UI
+│   │   ├── App.tsx
+│   │   ├── components/
+│   │   └── styles/
+│   └── shared/         # Shared types
+├── assets/             # Icons
+├── public/             # Static assets
+└── package.json
 ```
 
 ## Tech Stack
 
-- **Electron** - Cross-platform desktop framework
-- **React** - UI library
-- **TypeScript** - Type-safe JavaScript
-- **Vite** - Fast build tool
-- **chokidar** - File watching
-
-## Development
-
-```bash
-# Start development server
-npm run dev
-
-# In another terminal, start Electron in dev mode
-npm run electron:dev
-
-# Build for production
-npm run build
-
-# Package for distribution
-npm run package
-```
-
-## Journal Events
-
-The app monitors these Elite Dangerous journal events:
-
-| Event | Purpose |
-|-------|---------|
-| `NavRoute` | New route plotted - sets total jumps |
-| `FSDJump` | FSD jump completed - increments counter |
-| `CarrierJump` | Fleet carrier jump - increments counter |
-| `NavRouteClear` | Route cleared - resets counter |
-
-## License
-
-MIT
-
-## Author
-
-Sam Cogan - [@sam_cogan](https://twitter.com/sam_cogan)
+- **Electron**: Desktop framework
+- **React**: UI framework
+- **TypeScript**: Type safety
+- **Vite**: Build tool
+- **chokidar**: File watching
+- **electron-builder**: Application packaging
 
 ## Contributing
 
-Contributions welcome! Please feel free to submit a Pull Request.
+1. Fork the repository
+2. Create a feature branch
+3. Make your changes
+4. Submit a pull request
+
+## License
+
+MIT License - see LICENSE file for details.
+
+## Acknowledgments
+
+- Elite Dangerous is a trademark of Frontier Developments plc
+- Inspired by the need for a second-screen jump counter
 
 ---
 
-*Not affiliated with Frontier Developments. Elite Dangerous is a trademark of Frontier Developments plc.*
+**o7, Commander! 🦑**
