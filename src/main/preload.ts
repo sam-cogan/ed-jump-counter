@@ -24,9 +24,10 @@ interface RouteData {
 }
 
 interface JumpData {
-  completed: number;
-  remaining: number;
+  totalJumps: number;
+  completedJumps: number;
   currentSystem: string;
+  destinationSystem: string;
 }
 
 contextBridge.exposeInMainWorld('electronAPI', {
