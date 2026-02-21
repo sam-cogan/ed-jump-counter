@@ -1,7 +1,7 @@
 import fs from 'fs';
 import path from 'path';
 import { EventEmitter } from 'events';
-import chokidar from 'chokidar';
+import chokidar, { FSWatcher } from 'chokidar';
 
 interface NavRoute {
   StarSystem: string;
@@ -26,7 +26,7 @@ interface JournalEvent {
 
 export class JournalWatcher extends EventEmitter {
   private journalDir: string;
-  private watcher: chokidar.FSWatcher | null = null;
+  private watcher: FSWatcher | null = null;
   private currentFile: string = '';
   private filePosition: number = 0;
   private state: RouteData = {
@@ -45,7 +45,7 @@ export class JournalWatcher extends EventEmitter {
     this.startWatching();
   }
 
-  private startWatching() {
+  private startWatching(): void {
     // Check if directory exists
     if (!fs.existsSync(this.journalDir)) {
       console.warn(`Journal directory not found: ${this.journalDir}`);
@@ -72,7 +72,7 @@ export class JournalWatcher extends EventEmitter {
       }
     });
 
-    this.watcher.on('add', (filePath) => {
+    this.watcher.on('add', (filePath: string) => {
       if (filePath.startsWith('Journal.') && filePath.endsWith('.log')) {
         console.log('New journal file detected:', filePath);
         this.currentFile = filePath;
@@ -81,7 +81,7 @@ export class JournalWatcher extends EventEmitter {
       }
     });
 
-    this.watcher.on('change', (filePath) => {
+    this.watcher.on('change', (filePath: string) => {
       if (filePath === this.currentFile) {
         this.readCurrentFile();
       }
@@ -95,7 +95,7 @@ export class JournalWatcher extends EventEmitter {
     this.watcher.add(this.routeFilePath);
   }
 
-  private readCurrentFile() {
+  private readCurrentFile(): void {
     if (!this.currentFile || !fs.existsSync(this.currentFile)) {
       return;
     }
@@ -121,7 +121,7 @@ export class JournalWatcher extends EventEmitter {
     }
   }
 
-  private processEvent(event: JournalEvent) {
+  private processEvent(event: JournalEvent): void {
     switch (event.event) {
       case 'NavRoute':
         this.handleNavRoute(event);
@@ -138,7 +138,7 @@ export class JournalWatcher extends EventEmitter {
     }
   }
 
-  private handleNavRoute(event: JournalEvent) {
+  private handleNavRoute(event: JournalEvent): void {
     const routeData = event.Route as NavRoute[];
     if (routeData && routeData.length > 0) {
       this.state.route = routeData;
@@ -152,7 +152,7 @@ export class JournalWatcher extends EventEmitter {
     }
   }
 
-  private readNavRouteFile() {
+  private readNavRouteFile(): void {
     try {
       if (fs.existsSync(this.routeFilePath)) {
         const content = fs.readFileSync(this.routeFilePath, 'utf-8');
@@ -169,7 +169,7 @@ export class JournalWatcher extends EventEmitter {
     }
   }
 
-  private handleFSDJump(event: JournalEvent) {
+  private handleFSDJump(event: JournalEvent): void {
     this.state.completedJumps++;
     this.state.currentSystem = event.StarSystem as string;
 
@@ -180,7 +180,7 @@ export class JournalWatcher extends EventEmitter {
     });
   }
 
-  private handleCarrierJump(event: JournalEvent) {
+  private handleCarrierJump(event: JournalEvent): void {
     // Carrier jumps also count as jumps
     this.state.completedJumps++;
     this.state.currentSystem = event.FarSystem as string;
@@ -192,7 +192,7 @@ export class JournalWatcher extends EventEmitter {
     });
   }
 
-  private handleNavRouteClear() {
+  private handleNavRouteClear(): void {
     this.state = {
       totalJumps: 0,
       completedJumps: 0,
@@ -208,7 +208,7 @@ export class JournalWatcher extends EventEmitter {
     return { ...this.state };
   }
 
-  destroy() {
+  destroy(): void {
     if (this.watcher) {
       this.watcher.close();
       this.watcher = null;

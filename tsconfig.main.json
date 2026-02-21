@@ -1,15 +1,15 @@
 {
   "compilerOptions": {
     "target": "ES2020",
-    "module": "CommonJS",
-    "moduleResolution": "node",
-    "esModuleInterop": true,
-    "allowSyntheticDefaultImports": true,
+    "module": "commonjs",
+    "lib": ["ES2020"],
+    "outDir": "./dist/main",
+    "rootDir": "./src/main",
     "strict": true,
+    "esModuleInterop": true,
     "skipLibCheck": true,
-    "outDir": "dist/main",
-    "rootDir": "src/main",
-    "declaration": false
+    "forceConsistentCasingInFileNames": true,
+    "declaration": true
   },
   "include": ["src/main/**/*"]
 }

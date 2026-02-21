@@ -1,17 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import JumpCounter from './components/JumpCounter';
 import Settings from './components/Settings';
-
-interface JumpState {
-  totalJumps: number;
-  completedJumps: number;
-  currentSystem: string;
-  destinationSystem: string;
-  route: Array<{
-    StarSystem: string;
-    StarClass: string;
-  }>;
-}
+import type { JumpState } from './types';
 
 function App() {
   const [state, setState] = useState<JumpState>({
@@ -26,7 +16,7 @@ function App() {
 
   const loadState = useCallback(async () => {
     try {
-      const savedState = await (window as unknown as { electronAPI: { getJumpState: () => Promise<JumpState> } }).electronAPI.getJumpState();
+      const savedState = await window.electronAPI.getJumpState();
       if (savedState) {
         setState(savedState);
       }
@@ -38,13 +28,11 @@ function App() {
   useEffect(() => {
     loadState();
 
-    const electronAPI = (window as unknown as { electronAPI: { onRouteUpdate: (cb: (data: JumpState) => void); onJumpComplete: (cb: (data: JumpState) => void) } }).electronAPI;
-    
-    electronAPI.onRouteUpdate((data) => {
+    window.electronAPI.onRouteUpdate((data: JumpState) => {
       setState(data);
     });
 
-    electronAPI.onJumpComplete((data) => {
+    window.electronAPI.onJumpComplete((data: JumpState) => {
       setState(data);
     });
   }, [loadState]);
@@ -52,7 +40,7 @@ function App() {
   const handleToggleAlwaysOnTop = async () => {
     const newValue = !alwaysOnTop;
     setAlwaysOnTop(newValue);
-    await (window as unknown as { electronAPI: { setAlwaysOnTop: (v: boolean) => Promise<void> } }).electronAPI.setAlwaysOnTop(newValue);
+    await window.electronAPI.setAlwaysOnTop(newValue);
   };
 
   const remainingJumps = state.totalJumps - state.completedJumps;
@@ -63,7 +51,7 @@ function App() {
         <button className="control-btn settings-btn" onClick={() => setShowSettings(!showSettings)} title="Settings">
           ⚙
         </button>
-        <button className="control-btn close-btn" onClick={() => (window as unknown as { electronAPI: { closeWindow: () => void } }).electronAPI.closeWindow()} title="Close">
+        <button className="control-btn close-btn" onClick={() => window.electronAPI.closeWindow()} title="Close">
           ×
         </button>
       </div>
