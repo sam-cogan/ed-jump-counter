@@ -1,0 +1,50 @@
+name: CI/CD
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  build-release:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js v20
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Build the Electron app
+        run: npm run build
+
+      - name: Build Electron artifacts (Windows)
+        run: npx electron-builder build --windows --publish never
+
+      - name: Build Electron artifacts (Linux)
+        run: npx electron-builder build --linux --publish never
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: v${{ github.run_number }}
+          name: Release v${{ github.run_number }}
+          body: Automated release built from commit ${{ github.sha }}
+          files: |
+            release/*.exe
+            release/*.zip
+            release/*.dmg
+            release/*.AppImage
+            release/*.snap
+            release/*.deb
+            release/*.rpm
+            release/linux-unpacked/**
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
