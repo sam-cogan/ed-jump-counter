@@ -1,6 +1,6 @@
 {
   "name": "ed-jump-counter",
-  "version": "1.0.0",
+  "version": "0.1.0",
   "description": "Elite Dangerous jump counter for second screen",
   "main": "dist/main/index.js",
   "scripts": {
@@ -12,7 +12,12 @@
     "package": "electron-builder",
     "start": "npm run build && electron ."
   },
-  "keywords": ["elite-dangerous", "jump-counter", "desktop", "electron"],
+  "keywords": [
+    "elite-dangerous",
+    "jump-counter",
+    "desktop",
+    "electron"
+  ],
   "author": "sam-cogan",
   "license": "MIT",
   "repository": {

@@ -40,20 +40,22 @@ jobs:
       - name: Build Electron artifacts (Linux)
         run: npx electron-builder build --linux --publish never
 
+      - name: Get package.json version
+        id: get_version
+        run: echo "VERSION=$(node -p "require('./package.json').version")" >> "$GITHUB_OUTPUT"
+
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
         with:
-          tag_name: v${{ github.run_number }}
-          name: Release v${{ github.run_number }}
-          body: Automated release built from commit ${{ github.sha }}
+          tag_name: v${{ steps.get_version.outputs.VERSION }}
+          name: Release v${{ steps.get_version.outputs.VERSION }}
+          body: Automated release from version ${{ steps.get_version.outputs.VERSION }}
           files: |
-            release/*.exe
-            release/*.zip
-            release/*.dmg
+            release/*-setup-*.exe
             release/*.AppImage
-            release/*.snap
             release/*.deb
             release/*.rpm
-            release/linux-unpacked/**
+            release/*.zip # For Windows portable / without installer
+            # Add other specific files if needed, avoiding general wildcards
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
