@@ -65,7 +65,7 @@ export class JournalWatcher extends EventEmitter {
     // Watch for new files and changes
     this.watcher = chokidar.watch(this.journalDir, {
       persistent: true,
-      ignoreInitial: false,
+      ignoreInitial: true,
       awaitWriteFinish: {
         stabilityThreshold: 1000,
         pollInterval: 100
@@ -175,11 +175,7 @@ export class JournalWatcher extends EventEmitter {
     this.state.completedJumps++;
     this.state.currentSystem = event.StarSystem as string;
 
-    this.emit('jumpComplete', { 
-      completed: this.state.completedJumps,
-      remaining: this.state.totalJumps - this.state.completedJumps,
-      currentSystem: this.state.currentSystem
-    });
+    this.emit('jumpComplete', { ...this.state });
   }
 
   private handleCarrierJump(event: JournalEvent): void {
@@ -187,11 +183,7 @@ export class JournalWatcher extends EventEmitter {
     this.state.completedJumps++;
     this.state.currentSystem = event.FarSystem as string;
 
-    this.emit('jumpComplete', { 
-      completed: this.state.completedJumps,
-      remaining: this.state.totalJumps - this.state.completedJumps,
-      currentSystem: this.state.currentSystem
-    });
+    this.emit('jumpComplete', { ...this.state });
   }
 
   private handleNavRouteClear(): void {
