@@ -6,6 +6,9 @@ on:
       - main
   workflow_dispatch:
 
+permissions:
+  contents: write  # Grant write permission to the GITHUB_TOKEN for creating releases
+
 jobs:
   build-release:
     runs-on: ubuntu-latest
