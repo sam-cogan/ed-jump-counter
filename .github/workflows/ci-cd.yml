@@ -25,10 +25,11 @@ jobs:
       - name: Build the Electron app
         run: npm run build
 
-      - name: Install Wine and Xvfb (for Windows build on Linux)
+      - name: Install Wine32 and Xvfb (for Windows build on Linux)
         run: |
+          sudo dpkg --add-architecture i386
           sudo apt-get update
-          sudo apt-get install -y wine-staging xvfb
+          sudo apt-get install -y wine32 xvfb
 
       - name: Build Electron artifacts (Windows)
         run: npx electron-builder build --windows --publish never
