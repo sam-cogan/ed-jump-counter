@@ -51,11 +51,10 @@ jobs:
           name: Release v${{ steps.get_version.outputs.VERSION }}
           body: Automated release from version ${{ steps.get_version.outputs.VERSION }}
           files: |
-            release/*-setup-*.exe
-            release/*.AppImage
-            release/*.deb
-            release/*.rpm
-            release/*.zip # For Windows portable / without installer
-            # Add other specific files if needed, avoiding general wildcards
+            release/**/*.exe
+            release/**/*.zip
+            release/**/*.AppImage
+            release/**/*.deb
+            release/**/*.rpm
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
