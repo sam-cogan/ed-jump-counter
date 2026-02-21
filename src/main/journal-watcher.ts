@@ -73,7 +73,8 @@ export class JournalWatcher extends EventEmitter {
     });
 
     this.watcher.on('add', (filePath: string) => {
-      if (filePath.startsWith('Journal.') && filePath.endsWith('.log')) {
+      const basename = path.basename(filePath);
+      if (basename.startsWith('Journal.') && basename.endsWith('.log')) {
         console.log('New journal file detected:', filePath);
         this.currentFile = filePath;
         this.filePosition = 0;
@@ -142,7 +143,8 @@ export class JournalWatcher extends EventEmitter {
     const routeData = event.Route as NavRoute[];
     if (routeData && routeData.length > 0) {
       this.state.route = routeData;
-      this.state.totalJumps = routeData.length;
+      this.state.totalJumps = routeData.length - 1;
+      this.state.completedJumps = 0;
       this.state.destinationSystem = routeData[routeData.length - 1].StarSystem;
       
       // Read NavRoute.json for more details
@@ -160,7 +162,7 @@ export class JournalWatcher extends EventEmitter {
         
         if (routeData.Route && routeData.Route.length > 0) {
           this.state.route = routeData.Route;
-          this.state.totalJumps = routeData.Route.length;
+          this.state.totalJumps = routeData.Route.length - 1;
           this.state.destinationSystem = routeData.Route[routeData.Route.length - 1].StarSystem;
         }
       }
