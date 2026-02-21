@@ -1,0 +1,46 @@
+.jump-counter {
+  text-align: center;
+  user-select: none;
+}
+
+.counter-number {
+  font-family: 'Orbitron', monospace;
+  font-size: 72px;
+  font-weight: 900;
+  color: var(--ed-orange);
+  text-shadow: var(--glow-orange);
+  line-height: 1;
+  transition: all 0.3s ease;
+}
+
+.counter-number.inactive {
+  color: var(--ed-text-dim);
+  text-shadow: none;
+}
+
+.counter-label {
+  font-family: 'Rajdhani', sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 3px;
+  color: var(--ed-orange-dim);
+  margin-top: 8px;
+  text-transform: uppercase;
+}
+
+/* Animation for jump count change */
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.1);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+.counter-number.animate {
+  animation: pulse 0.3s ease-out;
+}

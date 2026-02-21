@@ -1,0 +1,56 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+:root {
+  /* Elite Dangerous color palette */
+  --ed-orange: #ff8c00;
+  --ed-orange-bright: #ffaa00;
+  --ed-orange-dim: #cc7000;
+  --ed-blue: #00b4ff;
+  --ed-blue-bright: #00d4ff;
+  --ed-background: #0a0a0a;
+  --ed-surface: #141414;
+  --ed-surface-light: #1a1a1a;
+  --ed-text: #e0e0e0;
+  --ed-text-dim: #808080;
+  --ed-border: #333333;
+  
+  /* Glow effects */
+  --glow-orange: 0 0 20px rgba(255, 140, 0, 0.5);
+  --glow-blue: 0 0 20px rgba(0, 180, 255, 0.5);
+}
+
+html, body {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background: transparent;
+  font-family: 'Rajdhani', 'Segoe UI', sans-serif;
+  color: var(--ed-text);
+}
+
+#root {
+  width: 100%;
+  height: 100%;
+}
+
+/* Scrollbar styling */
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--ed-surface);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--ed-orange-dim);
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--ed-orange);
+}
